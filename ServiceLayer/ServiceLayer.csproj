@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>ProductApiExample.ServiceLayer</AssemblyName>
+    <RootNamespace>ProductApiExample.ServiceLayer</RootNamespace>
+    <UserSecretsId>19037391-f15e-4710-bf06-ccdfc6193d51</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+  </ItemGroup>
+
+</Project>

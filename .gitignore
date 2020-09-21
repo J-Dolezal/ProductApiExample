@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Api/bin/
+/Api/obj/
+/DataLayer/bin/
+/DataLayer/obj/
+/ServiceLayer/bin/
+/ServiceLayer/obj/
+/DataLayer/DataLayer.csproj.user
