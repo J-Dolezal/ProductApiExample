@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProductApiExample.Api.Dto;
@@ -30,6 +31,7 @@ namespace ProductApiExample.Api.Controllers
         /// </summary>
         [HttpGet]
         [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Product>))]
         public IEnumerable<Product> Get()
         {
             return _productService.GetAll().Select(entity => _mapper.Map<Product>(entity)).AsEnumerable();
@@ -41,6 +43,8 @@ namespace ProductApiExample.Api.Controllers
         /// <param name="productId">ID of requested product</param>
         [HttpGet("{productId}")]
         [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
         public async Task<ActionResult<Product>> Get([FromRoute] int productId)
         {
             var p = await _productService.Get(productId);
@@ -60,6 +64,9 @@ namespace ProductApiExample.Api.Controllers
         /// <param name="description">Description to set</param>
         [HttpPatch("{productId}/description")]     
         [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SetDescription([FromRoute] int productId, [FromBody] string? description)
         {
             var operationResult = await _productService.SetDescription(productId, description);
