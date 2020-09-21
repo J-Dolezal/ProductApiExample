@@ -38,6 +38,10 @@ namespace ProductApiExample.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseGlobalExceptionHandling();
+            }
 
             app.UseHttpsRedirection();
 
@@ -47,8 +51,6 @@ namespace ProductApiExample.Api
             {
                 endpoints.MapControllers();
             });
-
-            //todo: use filter, catching exceptions and turning them into 500 http code
         }
     }
 }

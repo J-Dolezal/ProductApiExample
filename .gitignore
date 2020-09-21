@@ -10,3 +10,4 @@
 /ServiceLayer/bin/
 /ServiceLayer/obj/
 /DataLayer/DataLayer.csproj.user
+/Api/Api.csproj.user
