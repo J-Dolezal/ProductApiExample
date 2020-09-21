@@ -27,7 +27,7 @@ namespace ProductApiExample.Api
             services.AddControllers(o => {
                 o.AllowEmptyInputInBodyModelBinding = true;
             });
-            services.AddAutoMapper(cfg => cfg.CreateMap<DataLayer.Entities.Product, Dto.Product>());
+            services.AddAutoMapper(Utils.MappingHelper.MappingConfiguration);
             services.AddDbContext<DataLayer.Context>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString(DataLayer.Context.ConnectionStringName));
             });

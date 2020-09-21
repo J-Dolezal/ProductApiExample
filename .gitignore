@@ -5,6 +5,8 @@
 /.vs
 /Api/bin/
 /Api/obj/
+/Api.Test/bin/
+/Api.Test/obj/
 /DataLayer/bin/
 /DataLayer/obj/
 /ServiceLayer/bin/

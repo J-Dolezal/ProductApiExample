@@ -13,13 +13,13 @@ namespace ProductApiExample.Api.Controllers
 {
     [ApiController]
     [Route("products")]
-    public class ProductControler : ControllerBase
+    public class ProductController : ControllerBase
     {
-        private readonly ILogger<ProductControler> _logger;
+        private readonly ILogger<ProductController> _logger;
         private readonly IProductService _productService;
         private readonly IMapper _mapper;
 
-        public ProductControler(ILogger<ProductControler> logger, IProductService productService, IMapper mapper)
+        public ProductController(ILogger<ProductController> logger, IProductService productService, IMapper mapper)
         {
             _logger = logger;
             _productService = productService;
