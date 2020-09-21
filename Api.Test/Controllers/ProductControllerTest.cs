@@ -12,7 +12,7 @@ using ProductApiExample.ServiceLayer.Services;
 using ProductDto = ProductApiExample.Api.Dto.Product;
 using ProductEntity = ProductApiExample.DataLayer.Entities.Product;
 
-namespace Api.Test
+namespace ProductApiExample.Api.Test
 {
     public class ProductControllerTest
     {
