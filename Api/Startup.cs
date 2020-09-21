@@ -29,6 +29,7 @@ namespace ProductApiExample.Api
                 options.UseSqlServer(Configuration.GetConnectionString(DataLayer.Context.ConnectionStringName));
             });
             services.AddServiceLayer();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +45,16 @@ namespace ProductApiExample.Api
             }
 
             app.UseHttpsRedirection();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API");
+            });
 
             app.UseRouting();
 
