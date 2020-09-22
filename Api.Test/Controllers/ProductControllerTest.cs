@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using ProductApiExample.Api.Controllers;
 using ProductApiExample.ServiceLayer.Services;
+using ProductApiExample.UnitTestHelpers;
 using ProductDto = ProductApiExample.Api.Dto.Product;
 using ProductEntity = ProductApiExample.DataLayer.Entities.Product;
 
@@ -19,10 +20,7 @@ namespace ProductApiExample.Api.Test
         [Test]
         public void Get_ReturnsAll()
         {
-            var entities = Enumerable
-                .Range(1, 5)
-                .Select(id => new ProductEntity(id, $"name {id}", new Uri($"http://domain.domain/{id}"), id * 10, $"Description {id}"))
-                .ToList();
+            var entities = SeedHelper.CreateTestProducts().ToList();
             
             var productServiceMock = new Mock<IProductService>();
             productServiceMock.Setup(service => service.GetAll())

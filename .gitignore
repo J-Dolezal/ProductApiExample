@@ -11,5 +11,9 @@
 /DataLayer/obj/
 /ServiceLayer/bin/
 /ServiceLayer/obj/
+/ServiceLayer.Test/bin/
+/ServiceLayer.Test/obj/
+/UnitTestHelpers/bin/
+/UnitTestHelpers/obj/
 /DataLayer/DataLayer.csproj.user
 /Api/Api.csproj.user
