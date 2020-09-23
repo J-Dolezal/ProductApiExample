@@ -9,8 +9,8 @@ namespace ProductApiExample.ServiceLayer.Services
         /// <summary>
         /// Gets all products
         /// </summary>
-        IEnumerable<Product> GetAll();
-
+        IEnumerable<Product> GetAll(PagingParam? paging = null);
+        
         /// <summary>
         /// Returns product with specified ID
         /// </summary>
@@ -27,6 +27,6 @@ namespace ProductApiExample.ServiceLayer.Services
         /// <see cref="UpdateResult.NotFound"/> if product with given ID does not exist
         /// <see cref="UpdateResult.Success"/> if description was successfuly changed
         /// </returns>
-        Task<UpdateResult> SetDescription(int id, string? newDescription);
+        Task<UpdateResult> SetDescription(int id, string? newDescription);        
     }
 }

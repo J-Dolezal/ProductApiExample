@@ -14,11 +14,14 @@ namespace ProductApiExample.Api.Controllers
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
         private readonly IProductService _productService;
         private readonly IMapper _mapper;
+
+        public const int DefaultPageSize = 10;
 
         public ProductsController(ILogger<ProductsController> logger, IProductService productService, IMapper mapper)
         {
@@ -36,9 +39,63 @@ namespace ProductApiExample.Api.Controllers
         [MapToApiVersion("1.0")]
         public IEnumerable<Product> Get()
         {
-            return _productService.GetAll().Select(entity => _mapper.Map<Product>(entity)).AsEnumerable();
-        }    
-        
+            return _productService.GetAll().Select(entity => _mapper.Map<Product>(entity));
+        }
+
+        /// <summary>
+        /// Gets all products
+        /// </summary>
+        /// <param name="offset">Pagination - zero based index of starting record</param>
+        /// <param name="limit">Pagination - count of returned records (page size) Default is <see cref="DefaultPageSize"/></param>
+        /// <remarks>
+        /// When no <paramref name="limit"/> and <paramref name="offset"/> is sent, then pagination is inactive and all records are returned.
+        /// 
+        /// Otherwise pagination is active. In that case <paramref name="limit"/> must be greater than zero or null. If it is null, it falls back to
+        /// default value which is <see cref="DefaultPageSize"/>.
+        /// </remarks>
+        [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Product>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [MapToApiVersion("2.0")]
+        public ActionResult<IEnumerable<Product>> Get([FromQuery] uint? offset, [FromQuery] uint? limit)
+        {
+            if (offset==null && limit == null)
+            {
+                // no pagination requested
+                return Ok(Get());
+            }
+
+            // Getting list with pagination
+
+            if (offset == null)
+            {
+                ModelState.AddModelError(nameof(offset), $"Both, {nameof(offset)} and {nameof(limit)}, must be specified for pagination.");                
+            }
+
+            if (limit == null) 
+            { 
+                limit = DefaultPageSize; 
+            }
+            else if (limit.Value == 0)
+            {
+                ModelState.AddModelError(nameof(limit), $"{nameof(limit)} must be greater than 0");
+            }
+
+            if (ModelState.IsValid)
+            {
+                return Ok(_productService
+                    .GetAll(new PagingParam
+                    {
+                        Limit = limit ?? DefaultPageSize,
+                        Offset = offset.Value
+                    })
+                    .Select(entity => _mapper.Map<Product>(entity)));
+            }
+
+            return BadRequest(new ValidationProblemDetails(ModelState));
+        }
+
         /// <summary>
         /// Gets product by ID
         /// </summary>
@@ -48,6 +105,7 @@ namespace ProductApiExample.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
         [MapToApiVersion("1.0")]
+        [MapToApiVersion("2.0")]
         public async Task<ActionResult<Product>> Get([FromRoute] int productId)
         {
             var p = await _productService.Get(productId);
@@ -71,6 +129,7 @@ namespace ProductApiExample.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [MapToApiVersion("1.0")]
+        [MapToApiVersion("2.0")]
         public async Task<ActionResult> SetDescription([FromRoute] int productId, [FromBody] string? description)
         {
             var operationResult = await _productService.SetDescription(productId, description);
