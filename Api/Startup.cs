@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using ProductApiExample.ServiceLayer;
 
 namespace ProductApiExample.Api
@@ -25,7 +26,13 @@ namespace ProductApiExample.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers(o => {
-                o.AllowEmptyInputInBodyModelBinding = true;
+                o.AllowEmptyInputInBodyModelBinding = true;             
+            });
+            services.AddApiVersioning(config =>
+            {
+                config.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+                config.AssumeDefaultVersionWhenUnspecified = true;
+                config.ReportApiVersions = true;
             });
             services.AddAutoMapper(Utils.MappingHelper.MappingConfiguration);
             services.AddDbContext<DataLayer.Context>(options => {
@@ -38,6 +45,14 @@ namespace ProductApiExample.Api
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+                c.SwaggerDoc(
+                    "v1.0",
+                    new OpenApiInfo
+                    {
+                        Title = "Product API example",
+                        Version = "v1.0"
+                    });
+                c.EnableAnnotations();
             });
         }
 
@@ -62,7 +77,7 @@ namespace ProductApiExample.Api
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API");               
+                c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Product API v1.0");               
             });
 
             app.UseRouting();

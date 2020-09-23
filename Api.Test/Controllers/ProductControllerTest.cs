@@ -26,7 +26,7 @@ namespace ProductApiExample.Api.Test
             productServiceMock.Setup(service => service.GetAll())
                 .Returns(entities);
 
-            var tested = new ProductController(CreateLoggerMock(), productServiceMock.Object, ProductApiExample.Api.Utils.MappingHelper.CreateMapper());
+            var tested = new ProductsController(CreateLoggerMock(), productServiceMock.Object, ProductApiExample.Api.Utils.MappingHelper.CreateMapper());
 
             var result = tested.Get().ToList();
 
@@ -49,7 +49,7 @@ namespace ProductApiExample.Api.Test
             productServiceMock.Setup(service => service.Get(1))
                 .Returns(Task.FromResult<ProductEntity?>(productEntity));
 
-            var tested = new ProductController(CreateLoggerMock(), productServiceMock.Object, ProductApiExample.Api.Utils.MappingHelper.CreateMapper());
+            var tested = new ProductsController(CreateLoggerMock(), productServiceMock.Object, ProductApiExample.Api.Utils.MappingHelper.CreateMapper());
 
             var result = (await tested.Get(1)).Result;
 
@@ -64,7 +64,7 @@ namespace ProductApiExample.Api.Test
             productServiceMock.Setup(service => service.Get(1))
                 .Returns(Task.FromResult<ProductEntity?>(null));
 
-            var tested = new ProductController(CreateLoggerMock(), productServiceMock.Object, CreateMapperMock());
+            var tested = new ProductsController(CreateLoggerMock(), productServiceMock.Object, CreateMapperMock());
 
             var result = await tested.Get(1);
 
@@ -78,7 +78,7 @@ namespace ProductApiExample.Api.Test
             productServiceMock.Setup(service => service.SetDescription(1, null))
                 .Returns(Task.FromResult(UpdateResult.Success));
 
-            var tested = new ProductController(CreateLoggerMock(), productServiceMock.Object, CreateMapperMock());
+            var tested = new ProductsController(CreateLoggerMock(), productServiceMock.Object, CreateMapperMock());
 
             var result = await tested.SetDescription(1, null);
             Assert.IsInstanceOf<NoContentResult>(result);
@@ -91,13 +91,13 @@ namespace ProductApiExample.Api.Test
             productServiceMock.Setup(service => service.SetDescription(1, null))
                 .Returns(Task.FromResult(UpdateResult.NotFound));
 
-            var tested = new ProductController(CreateLoggerMock(), productServiceMock.Object, CreateMapperMock());
+            var tested = new ProductsController(CreateLoggerMock(), productServiceMock.Object, CreateMapperMock());
 
             var result = await tested.SetDescription(1, null);
             Assert.IsInstanceOf<NotFoundResult>(result);
         }
 
-        private static ILogger<ProductController> CreateLoggerMock() => new Mock<ILogger<ProductController>>().Object;
+        private static ILogger<ProductsController> CreateLoggerMock() => new Mock<ILogger<ProductsController>>().Object;
         private static IMapper CreateMapperMock() => new Mock<IMapper>().Object;
 
         private bool Equals(ProductEntity? e, ProductDto? dto)
