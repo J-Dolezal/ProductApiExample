@@ -6,7 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ProductApiExample.Api.Dto;
+using ProductApiExample.Api.Dto.v1_0;
 using ProductApiExample.ServiceLayer.Services;
 
 namespace ProductApiExample.Api.Controllers

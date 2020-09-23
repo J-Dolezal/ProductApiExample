@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using ProductApiExample.Api.Dto.v1_0;
 
 namespace ProductApiExample.Api.Utils
 {
@@ -18,7 +19,7 @@ namespace ProductApiExample.Api.Utils
         /// </summary>
         public static Action<IMapperConfigurationExpression> MappingConfiguration = cfg =>
         {
-            cfg.CreateMap<DataLayer.Entities.Product, Dto.Product>();
+            cfg.CreateMap<DataLayer.Entities.Product, Product>();
         };
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProductApiExample.Api.Dto
+namespace ProductApiExample.Api.Dto.v1_0
 {
     public class Product
     {

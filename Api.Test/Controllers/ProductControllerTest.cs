@@ -10,7 +10,7 @@ using NUnit.Framework;
 using ProductApiExample.Api.Controllers;
 using ProductApiExample.ServiceLayer.Services;
 using ProductApiExample.UnitTestHelpers;
-using ProductDto = ProductApiExample.Api.Dto.Product;
+using ProductDto = ProductApiExample.Api.Dto.v1_0.Product;
 using ProductEntity = ProductApiExample.DataLayer.Entities.Product;
 
 namespace ProductApiExample.Api.Test
@@ -23,10 +23,10 @@ namespace ProductApiExample.Api.Test
             var entities = SeedHelper.CreateTestProducts().ToList();
             
             var productServiceMock = new Mock<IProductService>();
-            productServiceMock.Setup(service => service.GetAll())
+            productServiceMock.Setup(service => service.GetAll(null))
                 .Returns(entities);
 
-            var tested = new ProductsController(CreateLoggerMock(), productServiceMock.Object, ProductApiExample.Api.Utils.MappingHelper.CreateMapper());
+            var tested = new ProductsController(CreateLoggerMock(), productServiceMock.Object, Utils.MappingHelper.CreateMapper());
 
             var result = tested.Get().ToList();
 
