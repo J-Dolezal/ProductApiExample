@@ -13,6 +13,8 @@ namespace ProductApiExample.Api
     {
         public static void UseGlobalExceptionHandling(this IApplicationBuilder app)
         {
+            var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger("API");
+
             app.UseExceptionHandler(appError =>
             {
                 appError.Run(async context =>
@@ -21,8 +23,7 @@ namespace ProductApiExample.Api
                     context.Response.ContentType = "application/json";
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
-                    {
-                        var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger("API");
+                    {                        
                         logger.LogError(contextFeature.Error, "Exception occurred");
                         await context.Response.WriteAsync(JsonSerializer.Serialize(new ProblemDetails()
                         {
