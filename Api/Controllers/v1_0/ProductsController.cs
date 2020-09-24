@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using ProductApiExample.Api.Dto.v1_0;
 using ProductApiExample.ServiceLayer.Services;
 
-namespace ProductApiExample.Api.Controllers
+namespace ProductApiExample.Api.Controllers.v1_0
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -43,60 +43,6 @@ namespace ProductApiExample.Api.Controllers
         }
 
         /// <summary>
-        /// Gets all products
-        /// </summary>
-        /// <param name="offset">Pagination - zero based index of starting record</param>
-        /// <param name="limit">Pagination - count of returned records (page size) Default is <see cref="DefaultPageSize"/></param>
-        /// <remarks>
-        /// When no <paramref name="limit"/> and <paramref name="offset"/> is sent, then pagination is inactive and all records are returned.
-        /// 
-        /// Otherwise pagination is active. In that case <paramref name="limit"/> must be greater than zero or null. If it is null, it falls back to
-        /// default value which is <see cref="DefaultPageSize"/>.
-        /// </remarks>
-        [HttpGet]
-        [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Product>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [MapToApiVersion("2.0")]
-        public ActionResult<IEnumerable<Product>> Get([FromQuery] uint? offset, [FromQuery] uint? limit)
-        {
-            if (offset==null && limit == null)
-            {
-                // no pagination requested
-                return Ok(Get());
-            }
-
-            // Getting list with pagination
-
-            if (offset == null)
-            {
-                ModelState.AddModelError(nameof(offset), $"Both, {nameof(offset)} and {nameof(limit)}, must be specified for pagination.");                
-            }
-
-            if (limit == null) 
-            { 
-                limit = DefaultPageSize; 
-            }
-            else if (limit.Value == 0)
-            {
-                ModelState.AddModelError(nameof(limit), $"{nameof(limit)} must be greater than 0");
-            }
-
-            if (ModelState.IsValid)
-            {
-                return Ok(_productService
-                    .GetAll(new PagingParam
-                    {
-                        Limit = limit ?? DefaultPageSize,
-                        Offset = offset.Value
-                    })
-                    .Select(entity => _mapper.Map<Product>(entity)));
-            }
-
-            return BadRequest(new ValidationProblemDetails(ModelState));
-        }
-
-        /// <summary>
         /// Gets product by ID
         /// </summary>
         /// <param name="productId">ID of requested product</param>
@@ -117,13 +63,13 @@ namespace ProductApiExample.Api.Controllers
 
             return Ok(_mapper.Map<Product>(p));
         }
-        
+
         /// <summary>
         /// Updates product description
         /// </summary>
         /// <param name="productId">Product id</param>
         /// <param name="description">Description to set</param>
-        [HttpPatch("{productId}/description")]     
+        [HttpPatch("{productId}/description")]
         [Consumes("application/json")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

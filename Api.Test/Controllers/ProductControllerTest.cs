@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using ProductApiExample.Api.Controllers;
+using ProductApiExample.Api.Controllers.v1_0;
 using ProductApiExample.ServiceLayer.Services;
 using ProductApiExample.UnitTestHelpers;
 using ProductDto = ProductApiExample.Api.Dto.v1_0.Product;
