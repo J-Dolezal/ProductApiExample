@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace ProductApiExample.ServiceLayer.Test
     public class ProductServiceTest
     {
         [Test]
-        public void GetAll_ReturnsAll()
+        public void GetAll_NullPaging_ReturnsAll()
         {
             using var context = CreateContextWithTestProducts();
 
@@ -20,6 +21,37 @@ namespace ProductApiExample.ServiceLayer.Test
             var result = tested.GetAll();
 
             Assert.AreEqual(SeedHelper.ProductSeedCount, result.Count());
+        }
+
+        [Test]
+        public void GetAll_PagingSet_RetursCorrectEntities()
+        {
+            const uint limit = 2;
+            const uint offset = 1;
+
+            using var context = CreateContextWithTestProducts();
+            var paging = new PagingParam { Offset = offset, Limit = limit };
+
+            var tested = new ProductService(context);
+            var result = tested.GetAll(paging).ToList();
+
+            Assert.AreEqual(limit, result.Count());
+            for (int i = 1; i <= limit; i++)
+            {
+                Assert.IsTrue(result.Any(p => p.Id == offset + i));
+            }
+        }
+
+        [Test]
+        public void GetAll_PagingLimitIsZero_ArgumentExceptionThrown()
+        {
+            var builder = new DbContextOptionsBuilder<DataLayer.Context>();
+            builder.UseInMemoryDatabase(System.Threading.Thread.CurrentThread.ManagedThreadId.ToString());
+
+            using var context = new DataLayer.Context(builder.Options);
+            var tested = new ProductService(context);
+
+            Assert.Throws<ArgumentException>(() => tested.GetAll(new PagingParam { Limit = 0, Offset = 0 }));
         }
 
         [Test]

@@ -7,7 +7,7 @@ namespace ProductApiExample.DataLayer
     {
         public const string ConnectionStringName = "ProductApiExampleData";
 
-        public DbSet<Product> Products => Set<Product>(); 
+        public DbSet<Product> Products => Set<Product>();
 
         public Context(DbContextOptions<Context> options) : base(options)
         { }

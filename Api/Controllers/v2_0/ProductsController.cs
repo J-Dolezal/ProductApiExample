@@ -62,17 +62,19 @@ namespace ProductApiExample.Api.Controllers.v2_0
                 else if (limit.Value == 0)
                 {
                     ModelState.AddModelError(nameof(limit), $"{nameof(limit)} must be greater than 0");
-                } 
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ValidationProblemDetails(ModelState));
+                }
+
+                paging = new PagingParam { Limit = limit.Value, Offset = offset.Value };
             }
 
-            if (ModelState.IsValid)
-            {
-                return Ok(_productService
+            return Ok(_productService
                     .GetAll(paging)
-                    .Select(entity => _mapper.Map<Product>(entity)));
-            }
-
-            return BadRequest(new ValidationProblemDetails(ModelState));
+                    .Select(entity => _mapper.Map<Product>(entity)));            
         }
     }
 }
